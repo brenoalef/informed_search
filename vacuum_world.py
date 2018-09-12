@@ -28,11 +28,8 @@ class VacuumWorld:
     def step_cost(self, state, action):
         return 1
     
-    def heuristic_cost(self, state, action):
-        cost = 0
-        if action == state[0] or action == self.SUCK and not state[0] in state[1]:
-            cost = 1
-        return cost
+    def heuristic_cost(self, state):
+        return len(state[1])
 
 
 def raw_exec_time(problem):

@@ -1,19 +1,19 @@
 from functools import partial
 
 class Node:
-    def __init__(self, state, parent=None, action=None, path_cost=0):
+    def __init__(self, state, parent=None, action=None, path_cost=0, reach_cost=0):
         self.state = state
         self.parent = parent
         self.action = action
         self.path_cost = path_cost
+        self.reach_cost = reach_cost
     
     def __lt__(self, other):
         return self.path_cost < other.path_cost
-        i
 
 
 def __a_star(problem):
-    node = Node(state = problem.initial_state, path_cost = 0)
+    node = Node(state = problem.initial_state, path_cost = problem.heuristic_cost(problem.initial_state))
     frontier = [node]
     explored = []
     while True:
@@ -32,7 +32,7 @@ def __a_star(problem):
 
 
 def __greedy_best_first(problem):
-   node = Node(state = problem.initial_state, path_cost = 0)
+   node = Node(state = problem.initial_state, path_cost = problem.heuristic_cost(problem.initial_state))
    frontier = [node]
    explored = []
    while True:
@@ -52,10 +52,11 @@ def __greedy_best_first(problem):
 
 def __child_node(problem, parent, action, a_star=False):
     new_state = problem.result(parent.state, action)
-    new_path_cost = problem.heuristic_cost(parent.state, action)
+    new_reach_cost = parent.reach_cost + problem.step_cost(parent.state, action)
+    new_path_cost = problem.heuristic_cost(new_state)
     if a_star == True:
-        new_path_cost += parent.path_cost + problem.step_cost(parent.state, action)
-    return Node(new_state, parent, action, new_path_cost)
+        new_path_cost += new_reach_cost
+    return Node(new_state, parent, action, new_path_cost, new_reach_cost)
 
 
 def __solution(node):

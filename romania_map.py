@@ -86,9 +86,9 @@ class RomaniaMap:
 
     def step_cost(self, state, action):
         return action[1]
-
-    def heuristic_cost(self, state, action):
-        lat1, lon1 = self.positions[action[0]]
+    
+    def heuristic_cost(self, state):
+        lat1, lon1 = self.positions[state]
         lat2, lon2 = self.positions[self.goal]
         radius = 6371
         dlat = math.radians(lat2-lat1)
@@ -97,7 +97,7 @@ class RomaniaMap:
         c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
         d = radius * c
         return d
-
+    
 
 def raw_exec_time(problem):
     num_iter = 10000
